@@ -6,7 +6,7 @@ from typing import Iterable, Tuple
 from PIL import Image
 
 WORKSPACE_ROOT = Path(__file__).resolve().parents[1]
-SOURCE_PATH = WORKSPACE_ROOT / "images" / "favicon" / "heart.png"
+SOURCE_PATH = WORKSPACE_ROOT / "images" / "favicon" / "person.png"
 OUTPUT_DIR = WORKSPACE_ROOT / "images" / "favicon"
 
 PNG_OUTPUTS: Tuple[Tuple[str, Tuple[int, int]], ...] = (
@@ -47,7 +47,5 @@ def main() -> None:
         save_png_variants(base)
         save_ico_variant(base, ICO_SIZES)
 
-
 if __name__ == "__main__":
     main()
-
