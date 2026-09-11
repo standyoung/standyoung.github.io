@@ -57,18 +57,15 @@ function renderHeader() {
                   <h1><a href="./index.html">${site.name}</a></h1>
                 </div>
                 <div class="flex-0" style="width: 16px"></div>
-                <div class="flex-1 flex-row" data-site-editable-id="navpages" data-overflow-nav-target="linksContainer" style="min-width: 0;">
+                <div class="flex-1 flex-row hidden-sm-down" data-site-editable-id="navpages" data-overflow-nav-target="linksContainer" style="min-width: 0;">
                   <div class="argyle-navlinks2-bar">${navMarkup(active)}</div>
                 </div>
-                <div class="flex-none hidden-sm-up">
-                  <div data-controller="popover2" data-popover2-anchor-origin-horizontal-value="right" data-popover2-transform-origin-horizontal-value="right">
-                    <div data-popover2-target="anchor" data-action="click->popover2#show" style="cursor: pointer; user-select: none;">
-                      <div style="padding: 4px">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" style="fill: currentColor;"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path></svg>
-                      </div>
-                    </div>
-                    <div data-popover2-target="overlay" data-action="click->popover2#hide" style="display: none; position: fixed; z-index: 1; top: 0; right: 0; bottom: 0; left: 0; background-color: transparent;"></div>
-                    <div data-popover2-target="body" data-action="click->popover2#hide" style="display: none; position: fixed; z-index: 1;">
+                <div class="flex-1 hidden-md-up" style="display: flex; justify-content: flex-end;">
+                  <div data-mobile-nav style="position: relative;">
+                    <button type="button" data-mobile-nav-toggle aria-label="Toggle navigation" aria-controls="mobile-navigation" aria-expanded="false" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: -6px 0; padding: 10px; border: 0; background: transparent; color: inherit; cursor: pointer; touch-action: manipulation;">
+                      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" height="24px" viewBox="0 -960 960 960" width="24px" style="fill: currentColor; pointer-events: none;"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path></svg>
+                    </button>
+                    <div id="mobile-navigation" style="display: none; position: absolute; z-index: 1; top: calc(100% + 6px); right: 0; min-width: 180px;">
                       <div class="argyle-navlinks2-menu">${navMarkup(active, "block")}</div>
                     </div>
                   </div>
@@ -84,6 +81,32 @@ function renderHeader() {
         </picture>
       </div>`
   );
+}
+
+function initializeMobileNavigation() {
+  const navigation = document.querySelector("[data-mobile-nav]");
+  const toggle = navigation.querySelector("[data-mobile-nav-toggle]");
+  const menu = navigation.querySelector("#mobile-navigation");
+  const setOpen = (open) => {
+    toggle.setAttribute("aria-expanded", String(open));
+    menu.style.display = open ? "block" : "none";
+  };
+
+  toggle.addEventListener("click", () => {
+    setOpen(toggle.getAttribute("aria-expanded") !== "true");
+  });
+  document.addEventListener("click", (event) => {
+    if (!navigation.contains(event.target) || event.target.closest("a")) {
+      setOpen(false);
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+  window.addEventListener("resize", () => setOpen(false));
 }
 
 function sidebarMarkup() {
@@ -126,7 +149,7 @@ function renderShell() {
       <div class="row">
         <div class="hidden-sm-down col-md-4 col-lg-3">${sidebarMarkup()}</div>
         <div class="col-xs-12 col-md-8 col-lg-9">
-          <div class="hidden-md-up">
+          <div class="argyle-contact-mobile hidden-md-up">
             <div class="argyle-site-picture-frame" style="margin-bottom: 24px;" data-site-editable-id="site_picture">
               <div class="theme-site-avatar-picture" style="position: relative; display: block; margin: 0 auto; padding: 100% 0 0; background-color: #ccc;">
                 <img src="${site.portrait}" style="object-fit: cover; position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;" alt="Site avatar">
@@ -167,5 +190,6 @@ function renderFooter() {
 }
 
 renderHeader();
+initializeMobileNavigation();
 renderShell();
 renderFooter();
