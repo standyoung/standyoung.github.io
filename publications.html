@@ -47,6 +47,11 @@
       .publication-entry .publication-title + .publication-authors,
       .domestic-publications .publication-authors + .publication-venue,
       .domestic-publications .publication-title + .publication-authors { margin-top: 0 !important; }
+      .publication-authors a:link,
+      .publication-authors a:visited,
+      .publication-authors a:active { color: inherit; text-decoration: underline; }
+      .publication-authors a:hover,
+      .publication-authors a:focus-visible { color: var(--theme-link-color); }
       .publication-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px !important; }
       @media (max-width: 767px) { .publication-entry { grid-template-columns: 1fr; } .publication-entry img { max-width: 220px; } }
     </style>
